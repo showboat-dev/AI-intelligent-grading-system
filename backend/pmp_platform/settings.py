@@ -1,7 +1,12 @@
 """
 Django settings for pmp_platform project.
 """
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
+# Gemini API设置
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 import os
 from pathlib import Path
 

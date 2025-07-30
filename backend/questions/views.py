@@ -8,7 +8,7 @@ from .serializers import (
     QuestionSetSerializer, QuestionSerializer, UserAnswerSerializer,
     FileUploadSerializer, SubmitAnswerSerializer
 )
-from .pdf_parser import PDFParser
+from .gemini_parser import GeminiPDFParser as PDFParser
 import json
 
 
@@ -63,9 +63,13 @@ class FileUploadView(APIView):
                 }, status=status.HTTP_201_CREATED)
                 
             except Exception as e:
+                import traceback
+                print(f"错误详情: {str(e)}")
+                print(f"错误堆栈: {traceback.format_exc()}")
                 return Response({
-                    'error': f'文件解析失败: {str(e)}'
-                }, status=status.HTTP_400_BAD_REQUEST)
+                    'error': f'文件解析失败: {str(e)}',
+                    'details': traceback.format_exc()
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
